@@ -2,6 +2,12 @@
 
 OpenAI GPT-4o を使ったシンプルなチャットボットアプリです。Next.js (App Router) + TypeScript + Tailwind CSS で構築されています。
 
+## 検証レポート
+
+CCAGI SDK を使った開発フロー（要件定義→設計→実装→テスト→GitHub管理）の検証レポートです。
+
+[検証レポートを見る](https://htmlpreview.github.io/?https://raw.githubusercontent.com/takumi-fujita-rc/chat_app/main/docs/report/verification-report.html)
+
 ## 機能
 
 - リアルタイムチャット（OpenAI GPT-4o）
