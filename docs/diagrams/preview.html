@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>chat_app - Phase 2 設計図</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body { font-family: sans-serif; max-width: 960px; margin: 40px auto; padding: 0 24px; background: #f9fafb; color: #1f2937; }
+    h1 { font-size: 1.6rem; border-bottom: 2px solid #6366f1; padding-bottom: 8px; }
+    h2 { font-size: 1.2rem; margin-top: 40px; color: #4f46e5; }
+    h3 { font-size: 1rem; color: #374151; margin-top: 24px; }
+    .card { background: white; border-radius: 12px; padding: 24px; margin: 16px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .badge { display: inline-block; background: #e0e7ff; color: #4338ca; font-size: 0.75rem; padding: 2px 10px; border-radius: 99px; margin-bottom: 12px; }
+    .mermaid { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>📐 chat_app — Phase 2 設計図</h1>
+  <p>CCAGI SDK v3.13.0 生成 / 2026-03-12</p>
+
+  <!-- ===== SEQUENCE ===== -->
+  <h2>📋 シーケンス図（sequence.md）</h2>
+
+  <div class="card">
+    <span class="badge">SD-001</span>
+    <h3>メッセージ送信フロー（正常系）</h3>
+    <div class="mermaid">
+sequenceDiagram
+    participant U as ユーザー
+    participant FE as Frontend (Next.js)
+    participant API as API Route (/api/chat)
+    participant OAI as OpenAI API
+
+    U->>FE: メッセージ入力 & 送信
+    FE->>FE: ローディング状態ON
+    FE->>FE: 会話履歴にユーザーメッセージ追加
+    FE->>API: POST /api/chat { messages: [...] }
+    API->>OAI: chat.completions.create(model: gpt-4o, messages)
+    OAI-->>API: AIレスポンス
+    API-->>FE: { role: "assistant", content: "..." }
+    FE->>FE: 会話履歴にAIメッセージ追加
+    FE->>FE: ローディング状態OFF
+    FE-->>U: AIの返答を表示
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="badge">SD-002</span>
+    <h3>メッセージ送信フロー（エラー系）</h3>
+    <div class="mermaid">
+sequenceDiagram
+    participant U as ユーザー
+    participant FE as Frontend (Next.js)
+    participant API as API Route (/api/chat)
+    participant OAI as OpenAI API
+
+    U->>FE: メッセージ入力 & 送信
+    FE->>FE: ローディング状態ON
+    FE->>API: POST /api/chat { messages: [...] }
+    API->>OAI: chat.completions.create(...)
+    OAI-->>API: エラー（Rate limit / Network error）
+    API-->>FE: 500 { error: "AI APIエラーが発生しました" }
+    FE->>FE: ローディング状態OFF
+    FE-->>U: エラーメッセージ表示
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="badge">SD-003</span>
+    <h3>会話リセットフロー</h3>
+    <div class="mermaid">
+sequenceDiagram
+    participant U as ユーザー
+    participant FE as Frontend (Next.js)
+
+    U->>FE: 「会話をリセット」ボタンクリック
+    FE->>FE: 会話履歴をクリア（useState）
+    FE-->>U: 空のチャット画面を表示
+    </div>
+  </div>
+
+  <!-- ===== ARCHITECTURE ===== -->
+  <h2>🏗 アーキテクチャ図（architecture.md）</h2>
+
+  <div class="card">
+    <span class="badge">システム全体</span>
+    <h3>システムアーキテクチャ</h3>
+    <div class="mermaid">
+graph TB
+    subgraph Client["ブラウザ (Client)"]
+        UI["Chat UI<br/>src/app/page.tsx<br/>(use client)"]
+    end
+
+    subgraph Server["Next.js Server (Vercel / localhost)"]
+        API["API Route<br/>src/app/api/chat/route.ts<br/>(Server Side)"]
+        ENV[".env.local<br/>OPENAI_API_KEY"]
+    end
+
+    subgraph External["外部サービス"]
+        OAI["OpenAI API<br/>gpt-4o"]
+    end
+
+    UI -->|"POST /api/chat"| API
+    API -->|"chat.completions.create()"| OAI
+    OAI -->|"レスポンス"| API
+    API -->|"JSON レスポンス"| UI
+    ENV -.->|"process.env"| API
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="badge">コンポーネント</span>
+    <h3>コンポーネント構成</h3>
+    <div class="mermaid">
+graph TD
+    Page["page.tsx<br/>(Client Component)"]
+    Page --> ChatMessages["ChatMessages<br/>メッセージ一覧表示"]
+    Page --> ChatInput["ChatInput<br/>入力フォーム + 送信ボタン"]
+    Page --> LoadingIndicator["LoadingIndicator<br/>処理中表示"]
+    ChatMessages --> ChatMessage["ChatMessage<br/>個別メッセージ（user/assistant）"]
+    </div>
+  </div>
+
+  <!-- ===== DATAFLOW ===== -->
+  <h2>🔄 データフロー図（dataflow.md）</h2>
+
+  <div class="card">
+    <span class="badge">データフロー</span>
+    <h3>メッセージデータフロー</h3>
+    <div class="mermaid">
+flowchart LR
+    subgraph Input["入力"]
+        UserInput["ユーザー入力(string)"]
+    end
+
+    subgraph Frontend["Frontend State"]
+        Messages["messages Message[]"]
+        Loading["isLoading boolean"]
+    end
+
+    subgraph APILayer["API Layer"]
+        Route["POST /api/chat"]
+        OpenAIClient["OpenAI Client chat.completions.create()"]
+    end
+
+    subgraph Output["出力"]
+        AIResponse["AIレスポンス(string)"]
+    end
+
+    UserInput -->|"送信"| Messages
+    Messages -->|"全会話履歴"| Route
+    Route --> OpenAIClient
+    OpenAIClient -->|"content"| AIResponse
+    AIResponse -->|"追加"| Messages
+    Route -.->|"処理中"| Loading
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="badge">状態管理</span>
+    <h3>状態遷移図</h3>
+    <div class="mermaid">
+stateDiagram-v2
+    [*] --> Idle: 初期状態
+    Idle --> Loading: メッセージ送信
+    Loading --> Idle: AIレスポンス受信
+    Loading --> Error: APIエラー
+    Error --> Idle: エラー確認
+    Idle --> Idle: 会話リセット
+    </div>
+  </div>
+
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'default' });</script>
+</body>
+</html>

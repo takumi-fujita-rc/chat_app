@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ccagi-tools": {
+      "command": "/Users/taku/.ccagi/bin/ccagi-tools-server",
+      "args": []
+    }
+  }
+}
