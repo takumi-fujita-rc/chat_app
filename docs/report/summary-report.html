@@ -295,6 +295,78 @@
     </div>
   </div>
 
+  <!-- Quality Gate -->
+  <div class="section">
+    <div class="section-title">Phase 5.5 — 品質ゲート結果</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+
+      <!-- Mock Detector -->
+      <div style="background:white; border-radius:12px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+          <h3 style="font-size:15px; font-weight:700; color:#0f3460;">🔍 Mock Detector</h3>
+          <span style="background:#e8f5e9; color:#2e7d32; font-size:12px; font-weight:700; padding:4px 12px; border-radius:20px;">PASS</span>
+        </div>
+        <table style="width:100%; font-size:13px; border-collapse:collapse;">
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:6px 0; color:#555;">Critical</td>
+            <td style="padding:6px 0; text-align:right; font-weight:700; color:#2e7d32;">0件 ✅</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:6px 0; color:#555;">High</td>
+            <td style="padding:6px 0; text-align:right; font-weight:700; color:#2e7d32;">0件 ✅</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:6px 0; color:#555;">Medium</td>
+            <td style="padding:6px 0; text-align:right; color:#888;">1件（console.error — 許容）</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 0; color:#555;">Low / False Positive</td>
+            <td style="padding:6px 0; text-align:right; color:#888;">1件（placeholder属性）</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- UI Skills -->
+      <div style="background:white; border-radius:12px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+          <h3 style="font-size:15px; font-weight:700; color:#0f3460;">🎨 UI Skills</h3>
+          <span style="background:#e8f5e9; color:#2e7d32; font-size:12px; font-weight:700; padding:4px 12px; border-radius:20px;">PASS</span>
+        </div>
+        <table style="width:100%; font-size:13px; border-collapse:collapse;">
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:6px 0; color:#555;">Tech Stack</td>
+            <td style="padding:6px 0; text-align:right; color:#888;">Minor 2件</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:6px 0; color:#555;">Accessibility</td>
+            <td style="padding:6px 0; text-align:right; color:#888;">Info 3件</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;">
+            <td style="padding:6px 0; color:#555;">Animation / Layout</td>
+            <td style="padding:6px 0; text-align:right; color:#888;">Minor 3件</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 0; color:#555;">Performance / Interaction</td>
+            <td style="padding:6px 0; text-align:right; font-weight:700; color:#2e7d32;">0件 ✅</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Gate Verdict -->
+    <div style="background:linear-gradient(135deg, #e8f5e9, #f1f8e9); border:1px solid #a5d6a7; border-radius:12px; padding:20px 24px; display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:16px; font-weight:700; color:#2e7d32; margin-bottom:4px;">✅ 品質ゲート 総合判定: PASS</div>
+        <div style="font-size:13px; color:#555;">Critical / High 検出ゼロ。Phase 6（ドキュメント）/ Phase 7（デプロイ）へ進行可能。</div>
+      </div>
+      <a href="https://github.com/takumi-fujita-rc/chat_app/blob/main/docs/quality/ui-review-report.md"
+         target="_blank"
+         style="font-size:12px; color:#0f3460; background:white; border:1px solid #0f3460; padding:8px 16px; border-radius:8px; text-decoration:none; white-space:nowrap;">
+        詳細レポートを見る →
+      </a>
+    </div>
+  </div>
+
   <!-- Findings -->
   <div class="section">
     <div class="section-title">評価・気づき</div>
