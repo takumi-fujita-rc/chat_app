@@ -136,7 +136,7 @@
         <div class="kpi-label">要件〜GitHub管理</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-num">8</div>
+        <div class="kpi-num">13</div>
         <div class="kpi-unit">件</div>
         <div class="kpi-label">E2Eテスト 全通過</div>
       </div>
@@ -243,6 +243,24 @@
         </div>
       </div>
 
+      <div class="phase">
+        <div class="phase-label" style="background:#f0f4ff;">
+          <div class="phase-num">追加検証</div>
+          <div class="phase-name">認証機能の追加</div>
+          <span class="phase-badge">完了</span>
+        </div>
+        <div class="phase-body">
+          <h4>Issue駆動開発フローの検証</h4>
+          <ul>
+            <li>GitHub Issue #7 を起票し、要件・対応方針を定義</li>
+            <li>mainブランチから <code>feature/7-authentication</code> を切って開発</li>
+            <li>NextAuth.js v5 によるログイン認証・ミドルウェア・ログアウトを実装</li>
+            <li>認証E2Eテスト 5件を追加、既存チャストテスト 8件も全通過確認</li>
+            <li>PR #8 を作成し、レビュー後に main へマージ・ブランチ削除</li>
+          </ul>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -345,6 +363,11 @@
           <tr style="border-top:1px solid #f0f0f0;">
             <td style="padding:10px 14px; color:#888;">#6</td>
             <td style="padding:10px 14px;">📦 Phase 5: GitHubコード管理 - chat_app</td>
+            <td style="padding:10px 14px; text-align:center;"><span style="background:#e8f5e9; color:#2e7d32; font-size:11px; padding:3px 10px; border-radius:20px; font-weight:600;">CLOSED</span></td>
+          </tr>
+          <tr style="border-top:1px solid #f0f0f0; background:#fffdf0;">
+            <td style="padding:10px 14px; color:#888;">#7</td>
+            <td style="padding:10px 14px;">🔐 feat: シンプルなID/パスワード認証の追加<br><span style="font-size:11px; color:#999;">branch: feature/7-authentication → PR #8 → mainマージ</span></td>
             <td style="padding:10px 14px; text-align:center;"><span style="background:#e8f5e9; color:#2e7d32; font-size:11px; padding:3px 10px; border-radius:20px; font-weight:600;">CLOSED</span></td>
           </tr>
         </tbody>
