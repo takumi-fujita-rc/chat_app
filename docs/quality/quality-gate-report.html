@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 5.5 品質ゲートレポート — chat_app</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif; background: #f5f7fa; color: #1a1a2e; }
+
+    .hero {
+      background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+      color: white;
+      padding: 40px;
+    }
+    .hero-label { font-size: 11px; letter-spacing: 3px; color: #7ec8e3; text-transform: uppercase; margin-bottom: 10px; }
+    .hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+    .hero-meta { display: flex; gap: 24px; font-size: 13px; color: #b0c4d8; margin-top: 16px; }
+
+    .verdict {
+      background: #e8f5e9; border-left: 5px solid #2e7d32;
+      padding: 18px 32px; display: flex; align-items: center; gap: 16px;
+    }
+    .verdict-icon { font-size: 32px; }
+    .verdict-text h2 { font-size: 18px; color: #2e7d32; margin-bottom: 2px; }
+    .verdict-text p { font-size: 13px; color: #555; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+    .section { margin-bottom: 44px; }
+    .section-title {
+      font-size: 11px; letter-spacing: 3px; color: #0f3460; text-transform: uppercase;
+      border-bottom: 2px solid #0f3460; padding-bottom: 6px; margin-bottom: 20px;
+    }
+
+    /* KPI */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .kpi-card { background: white; border-radius: 10px; padding: 20px 14px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .kpi-num { font-size: 36px; font-weight: 700; color: #0f3460; line-height: 1; }
+    .kpi-unit { font-size: 13px; color: #0f3460; margin-bottom: 4px; }
+    .kpi-label { font-size: 11px; color: #888; }
+    .kpi-pass .kpi-num { color: #2e7d32; }
+
+    /* Category cards */
+    .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .category-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .category-header { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f0f0f0; }
+    .category-name { font-size: 14px; font-weight: 700; color: #0f3460; }
+    .badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .badge-pass { background: #e8f5e9; color: #2e7d32; }
+    .badge-warn { background: #fff3e0; color: #e65100; }
+    .category-body { padding: 0; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { background: #f8f9fc; padding: 8px 14px; text-align: left; color: #666; font-weight: 600; }
+    td { padding: 9px 14px; border-top: 1px solid #f5f5f5; color: #444; vertical-align: top; }
+    tr:hover td { background: #fafbff; }
+    code { background: #f0f4ff; color: #0f3460; padding: 1px 5px; border-radius: 4px; font-size: 11px; font-family: monospace; }
+
+    .sev-minor { color: #f59e0b; font-weight: 600; }
+    .sev-info { color: #94a3b8; font-weight: 600; }
+    .sev-pass { color: #2e7d32; font-weight: 600; }
+
+    /* Pass list */
+    .pass-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .pass-item { background: white; border-radius: 8px; padding: 14px 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border-left: 3px solid #2e7d32; }
+    .pass-item .pass-title { font-size: 13px; font-weight: 700; color: #2e7d32; margin-bottom: 4px; }
+    .pass-item .pass-desc { font-size: 12px; color: #666; }
+
+    /* Recommendations */
+    .rec-list { list-style: none; }
+    .rec-list li { background: white; border-radius: 8px; padding: 14px 18px; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); font-size: 13px; color: #444; display: flex; gap: 12px; align-items: flex-start; }
+    .rec-num { background: #f0f4ff; color: #0f3460; font-weight: 700; font-size: 12px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+
+    /* Mock detector */
+    .mock-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .mock-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .mock-card h4 { font-size: 13px; font-weight: 700; color: #0f3460; margin-bottom: 12px; }
+    .mock-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
+    .mock-row:last-child { border-bottom: none; }
+
+    footer { text-align: center; padding: 24px; font-size: 12px; color: #aaa; }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-label">Phase 5.5 — Quality Gate</div>
+  <h1>品質ゲートレポート</h1>
+  <p style="color:#b0c4d8; font-size:14px;">Mock Detector + UI Skills による品質検証結果</p>
+  <div class="hero-meta">
+    <span>📅 実施日: 2026年3月13日</span>
+    <span>🏗 対象: chat_app</span>
+    <span>📋 ポリシー: standard</span>
+    <span>🔍 スキャン対象: 11ファイル</span>
+  </div>
+</div>
+
+<!-- Verdict -->
+<div class="verdict">
+  <div class="verdict-icon">✅</div>
+  <div class="verdict-text">
+    <h2>品質ゲート 総合判定: PASS</h2>
+    <p>Mock Detector・UI Skills ともにCritical/High 検出ゼロ。Phase 6（ドキュメント）/ Phase 7（デプロイ）へ進行可能。</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- KPI -->
+  <div class="section">
+    <div class="section-title">検査サマリー</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-num">11</div>
+        <div class="kpi-unit">ファイル</div>
+        <div class="kpi-label">スキャン対象</div>
+      </div>
+      <div class="kpi-card kpi-pass">
+        <div class="kpi-num">0</div>
+        <div class="kpi-unit">件</div>
+        <div class="kpi-label">Critical / High</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">10</div>
+        <div class="kpi-unit">件</div>
+        <div class="kpi-label">Minor / Info（要対応なし）</div>
+      </div>
+      <div class="kpi-card kpi-pass">
+        <div class="kpi-num">6</div>
+        <div class="kpi-unit">項目</div>
+        <div class="kpi-label">品質基準 クリア</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mock Detector -->
+  <div class="section">
+    <div class="section-title">Mock Detector 結果</div>
+    <div class="mock-grid">
+      <div class="mock-card">
+        <h4>🔍 モックデータ検出</h4>
+        <div class="mock-row"><span>Critical（認証情報ハードコード）</span><span class="sev-pass">0件 ✅</span></div>
+        <div class="mock-row"><span>High（mockData・dummyData等）</span><span class="sev-pass">0件 ✅</span></div>
+        <div class="mock-row"><span>Medium（console.error）</span><span style="color:#888;">1件（許容）</span></div>
+        <div class="mock-row"><span>Low / False Positive（placeholder属性）</span><span style="color:#888;">1件</span></div>
+      </div>
+      <div class="mock-card">
+        <h4>🔐 セキュリティ確認</h4>
+        <div class="mock-row"><span>APIキーのクライアント露出</span><span class="sev-pass">なし ✅</span></div>
+        <div class="mock-row"><span>ハードコードパスワード</span><span class="sev-pass">なし ✅</span></div>
+        <div class="mock-row"><span>環境変数の使用</span><span class="sev-pass">適切 ✅</span></div>
+        <div class="mock-row"><span>デバッグ用 console.log</span><span class="sev-pass">なし ✅</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UI Skills -->
+  <div class="section">
+    <div class="section-title">UI Skills 検出詳細</div>
+    <div class="category-grid">
+
+      <div class="category-card">
+        <div class="category-header">
+          <span class="category-name">Tech Stack</span>
+          <span class="badge badge-warn">⚠️ WARN</span>
+        </div>
+        <div class="category-body">
+          <table>
+            <tr><th>ID</th><th>内容</th><th>Severity</th></tr>
+            <tr>
+              <td><code>TECH-001</code></td>
+              <td><code>src/components/ChatInput.tsx:37</code><br>インラインstyle使用 → Tailwindで代替可能</td>
+              <td><span class="sev-minor">🟡 Minor</span></td>
+            </tr>
+            <tr>
+              <td><code>TECH-003</code></td>
+              <td>cn utility（clsx / tailwind-merge）未導入<br>classNameの動的結合が手書き</td>
+              <td><span class="sev-minor">🟡 Minor</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="category-header">
+          <span class="category-name">Accessibility</span>
+          <span class="badge badge-warn">⚠️ WARN</span>
+        </div>
+        <div class="category-body">
+          <table>
+            <tr><th>ID</th><th>内容</th><th>Severity</th></tr>
+            <tr>
+              <td><code>A11Y-002</code></td>
+              <td><code>src/app/page.tsx:84</code><br>「会話をリセット」ボタン — テキストあり実害なし</td>
+              <td><span class="sev-info">⚪ Info</span></td>
+            </tr>
+            <tr>
+              <td><code>A11Y-002</code></td>
+              <td><code>src/app/page.tsx:91</code><br>「ログアウト」ボタン — テキストあり実害なし</td>
+              <td><span class="sev-info">⚪ Info</span></td>
+            </tr>
+            <tr>
+              <td><code>A11Y-002</code></td>
+              <td><code>src/components/ChatInput.tsx:44</code><br>「送信」ボタン — テキストあり実害なし</td>
+              <td><span class="sev-info">⚪ Info</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="category-header">
+          <span class="category-name">Animation / Typography</span>
+          <span class="badge badge-warn">⚠️ WARN</span>
+        </div>
+        <div class="category-body">
+          <table>
+            <tr><th>ID</th><th>内容</th><th>Severity</th></tr>
+            <tr>
+              <td><code>ANIM-002</code></td>
+              <td><code>LoadingIndicator.tsx:6-8</code><br>animate-bounce がループ継続。prefers-reduced-motion 未対応</td>
+              <td><span class="sev-minor">🟡 Minor</span></td>
+            </tr>
+            <tr>
+              <td><code>TYPO-001</code></td>
+              <td>見出し・ラベルに text-balance なし</td>
+              <td><span class="sev-info">⚪ Info</span></td>
+            </tr>
+            <tr>
+              <td><code>TYPO-002</code></td>
+              <td>本文テキストに text-pretty なし</td>
+              <td><span class="sev-info">⚪ Info</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="category-header">
+          <span class="category-name">Layout / Performance</span>
+          <span class="badge badge-warn">⚠️ WARN</span>
+        </div>
+        <div class="category-body">
+          <table>
+            <tr><th>ID</th><th>内容</th><th>Severity</th></tr>
+            <tr>
+              <td><code>LAYOUT-007</code></td>
+              <td><code>src/app/page.tsx:76</code><br>h-screen → h-dvh 推奨（モバイルアドレスバー対策）</td>
+              <td><span class="sev-minor">🟡 Minor</span></td>
+            </tr>
+            <tr>
+              <td><code>LAYOUT-007</code></td>
+              <td><code>src/app/login/page.tsx:36</code><br>min-h-screen → min-h-dvh 推奨</td>
+              <td><span class="sev-minor">🟡 Minor</span></td>
+            </tr>
+            <tr>
+              <td>Performance</td>
+              <td>blur / will-change / useEffect misuse</td>
+              <td><span class="sev-pass">✅ 問題なし</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Pass items -->
+  <div class="section">
+    <div class="section-title">品質基準 クリア項目</div>
+    <div class="pass-grid">
+      <div class="pass-item">
+        <div class="pass-title">✅ グラデーション</div>
+        <div class="pass-desc">使用なし（LAYOUT-004 準拠）</div>
+      </div>
+      <div class="pass-item">
+        <div class="pass-title">✅ blur / backdrop</div>
+        <div class="pass-desc">使用なし（PERF-001 準拠）</div>
+      </div>
+      <div class="pass-item">
+        <div class="pass-title">✅ will-change</div>
+        <div class="pass-desc">使用なし（PERF-002 準拠）</div>
+      </div>
+      <div class="pass-item">
+        <div class="pass-title">✅ インタラクション</div>
+        <div class="pass-desc">エラー表示・ローディング実装済み</div>
+      </div>
+      <div class="pass-item">
+        <div class="pass-title">✅ APIキー管理</div>
+        <div class="pass-desc">サーバーサイドのみ（process.env 参照）</div>
+      </div>
+      <div class="pass-item">
+        <div class="pass-title">✅ デバッグログ</div>
+        <div class="pass-desc">console.log なし（console.error のみ・許容）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recommendations -->
+  <div class="section">
+    <div class="section-title">推奨対応（任意）</div>
+    <ul class="rec-list">
+      <li>
+        <span class="rec-num">優先 1</span>
+        <span><strong>h-screen → h-dvh</strong>（src/app/page.tsx） — モバイルブラウザのアドレスバーで画面が切れる問題を防止できる</span>
+      </li>
+      <li>
+        <span class="rec-num">優先 2</span>
+        <span><strong>animate-bounce に prefers-reduced-motion 対応</strong> — アニメーションが苦手なユーザーへのアクセシビリティ向上</span>
+      </li>
+      <li>
+        <span class="rec-num">優先 3</span>
+        <span><strong>cn utility（clsx + tailwind-merge）の導入</strong> — className の動的結合を一元管理し、コードの可読性を向上</span>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  CCAGI SDK v3.13.0 — Phase 5.5 Quality Gate ／ 実施日 2026年3月13日 ／ chat_app
+</footer>
+
+</body>
+</html>
