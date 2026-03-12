@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { signOut } from "next-auth/react";
 import type { Message } from "@/types/chat";
 import ChatMessage from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
@@ -79,13 +80,21 @@ export default function Home() {
           <h1 className="text-lg font-semibold text-gray-800">AIチャット</h1>
           <p className="text-xs text-gray-400">Powered by OpenAI gpt-4o</p>
         </div>
-        <button
-          onClick={handleReset}
-          disabled={messages.length === 0}
-          className="text-xs text-gray-500 hover:text-red-500 disabled:opacity-30 transition-colors px-3 py-1 rounded-lg border border-gray-200 hover:border-red-200"
-        >
-          会話をリセット
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleReset}
+            disabled={messages.length === 0}
+            className="text-xs text-gray-500 hover:text-red-500 disabled:opacity-30 transition-colors px-3 py-1 rounded-lg border border-gray-200 hover:border-red-200"
+          >
+            会話をリセット
+          </button>
+          <button
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            className="text-xs text-gray-500 hover:text-gray-800 transition-colors px-3 py-1 rounded-lg border border-gray-200 hover:border-gray-400"
+          >
+            ログアウト
+          </button>
+        </div>
       </header>
 
       {/* Messages */}

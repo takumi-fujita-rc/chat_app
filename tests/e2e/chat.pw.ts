@@ -2,14 +2,20 @@ import { test, expect } from '@playwright/test';
 
 test.describe('chat_app E2E', () => {
 
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/login');
+    await page.getByPlaceholder('admin@example.com').fill('admin@example.com');
+    await page.getByPlaceholder('••••••••').fill('admin1234');
+    await page.getByRole('button', { name: 'ログイン' }).click();
+    await expect(page).toHaveURL('/', { timeout: 10000 });
+  });
+
   test('E2E-001: 初期表示 — 空の状態が表示される', async ({ page }) => {
-    await page.goto('/');
     await expect(page.getByText('AIとの会話を始めましょう')).toBeVisible();
     await expect(page.getByRole('button', { name: '会話をリセット' })).toBeDisabled();
   });
 
   test('E2E-002: メッセージ送信 — ユーザーメッセージが表示される', async ({ page }) => {
-    await page.goto('/');
     await page.getByRole('textbox').fill('こんにちは');
     await page.getByRole('button', { name: '送信' }).click();
 
@@ -21,7 +27,6 @@ test.describe('chat_app E2E', () => {
   });
 
   test('E2E-003: AIレスポンス受信 — AIの返答が表示される', async ({ page }) => {
-    await page.goto('/');
     await page.getByRole('textbox').fill('「テスト」と一言だけ返してください');
     await page.getByRole('button', { name: '送信' }).click();
 
@@ -36,7 +41,6 @@ test.describe('chat_app E2E', () => {
   });
 
   test('E2E-004: Enterキー送信', async ({ page }) => {
-    await page.goto('/');
     const textarea = page.getByRole('textbox');
     await textarea.fill('Enterで送信');
     await textarea.press('Enter');
@@ -44,7 +48,6 @@ test.describe('chat_app E2E', () => {
   });
 
   test('E2E-005: Shift+Enterで改行（送信されない）', async ({ page }) => {
-    await page.goto('/');
     const textarea = page.getByRole('textbox');
     await textarea.fill('1行目');
     await textarea.press('Shift+Enter');
@@ -55,8 +58,6 @@ test.describe('chat_app E2E', () => {
   });
 
   test('E2E-006: 会話リセット', async ({ page }) => {
-    await page.goto('/');
-
     // メッセージ送信
     await page.getByRole('textbox').fill('リセットテスト');
     await page.getByRole('button', { name: '送信' }).click();
@@ -82,7 +83,6 @@ test.describe('chat_app E2E', () => {
   });
 
   test('E2E-008: 空文字送信 — 送信されない', async ({ page }) => {
-    await page.goto('/');
     const sendBtn = page.getByRole('button', { name: '送信' });
     await expect(sendBtn).toBeDisabled();
     // 空白のみ
