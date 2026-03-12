@@ -6,7 +6,7 @@ OpenAI GPT-4o を使ったシンプルなチャットボットアプリです。
 
 CCAGI SDK を使った開発フロー（要件定義→設計→実装→テスト→GitHub管理）の検証レポートです。
 
-[検証レポートを見る](https://htmlpreview.github.io/?https://raw.githubusercontent.com/takumi-fujita-rc/chat_app/main/docs/report/verification-report.html)
+[検証レポートを見る](https://htmlpreview.github.io/?https://raw.githubusercontent.com/takumi-fujita-rc/chat_app/main/docs/report/verification-report.html)　｜　[エグゼクティブサマリーを見る](https://htmlpreview.github.io/?https://raw.githubusercontent.com/takumi-fujita-rc/chat_app/main/docs/report/summary-report.html)
 
 ## 機能
 
