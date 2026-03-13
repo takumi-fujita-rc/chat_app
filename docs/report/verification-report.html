@@ -44,7 +44,7 @@
 </div>
 
 <h2>🎯 検証目的</h2>
-<p>CCAGIのエージェント・コマンド群を使って開発フロー全体（要件定義 → 設計 → 実装 → テスト → GitHub管理）を一気通貫で回せるかを検証する。小規模なAIチャットボットアプリを題材として使用。</p>
+<p>CCAGIのエージェント・コマンド群を使って開発フロー全体（要件定義 → 設計 → 実装 → テスト → 品質ゲート → ドキュメント作成 → GitHub管理）を一気通貫で回せるかを検証する。小規模なAIチャットボットアプリを題材として使用。</p>
 
 <h2>📊 全体サマリー</h2>
 <div class="summary">
@@ -53,8 +53,10 @@
     <tr><td>Phase 1</td><td>要件定義</td><td><code>/generate-requirements</code></td><td class="pass">✅ 完了</td></tr>
     <tr><td>Phase 2</td><td>設計（シーケンス・アーキテクチャ・データフロー図）</td><td><code>/generate-sequence-diagram</code></td><td class="pass">✅ 完了</td></tr>
     <tr><td>Phase 3</td><td>実装</td><td><code>/implement-app</code></td><td class="pass">✅ 完了</td></tr>
-    <tr><td>Phase 4</td><td>テスト設計・E2E実行</td><td><code>/generate-test-design</code></td><td class="pass">✅ 完了（8/8件パス）</td></tr>
-    <tr><td>Phase 5</td><td>GitHubコード管理</td><td>git commit / push</td><td class="pass">✅ 完了</td></tr>
+    <tr><td>Phase 4</td><td>テスト設計・E2E実行</td><td><code>/generate-test-design</code></td><td class="pass">✅ 完了（13/13件パス）</td></tr>
+    <tr><td>Phase 5</td><td>品質ゲート（モック検出・UI品質レビュー）</td><td><code>/mock-detector</code> / <code>/ui-skills</code></td><td class="pass">✅ 完了（Critical/High: 0件）</td></tr>
+    <tr><td>Phase 6</td><td>ドキュメント作成</td><td><code>/generate-docs</code></td><td class="pass">✅ 完了</td></tr>
+    <tr><td>Phase 7</td><td>GitHubコード管理</td><td>git commit / push</td><td class="pass">✅ 完了</td></tr>
   </table>
 </div>
 
