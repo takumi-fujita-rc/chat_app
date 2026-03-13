@@ -199,6 +199,10 @@ make test-headed
 | 400 | メッセージが空 |
 | 500 | OpenAI API エラー |
 
+## 参考資料
+
+- [CCAGI SDK チュートリアル](https://www.customercloud.co.jp/limited/ccagi/tutorial.html)
+
 ## ライセンス
 
 MIT
